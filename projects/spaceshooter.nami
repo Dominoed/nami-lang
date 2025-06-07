@@ -1,0 +1,65 @@
+# Space Shooter Example
+let playerX = 150
+let bullets = []
+let enemies = []
+let score = 0
+let gameover = false
+
+page "SpaceShooter":
+  flex:
+    box:
+      text "Space Shooter! Score: {score}"
+      button "Restart"
+        on click:
+          set playerX = 150
+          set bullets = []
+          set enemies = []
+          set score = 0
+          set gameover = false
+    box:
+      js:
+        var canvas = document.getElementById('shooter_canvas');
+        if (!canvas) {
+          canvas = document.createElement('canvas');
+          canvas.id = 'shooter_canvas';
+          canvas.width = 300;
+          canvas.height = 400;
+          document.currentScript.parentElement.appendChild(canvas);
+        }
+        function draw() {
+          var ctx = canvas.getContext('2d');
+          ctx.clearRect(0,0,300,400);
+          ctx.fillRect(state.playerX, 380, 30, 10); // player
+          for (let b of state.bullets) ctx.fillRect(b[0], b[1], 4, 8);
+          for (let e of state.enemies) ctx.fillRect(e[0], e[1], 24, 12);
+        }
+        setInterval(draw, 30);
+      loop per frame:
+        js:
+          // Move bullets
+          state.bullets = state.bullets.map(b=>[b[0],b[1]-5]).filter(b=>b[1]>-10);
+          // Move enemies
+          state.enemies = state.enemies.map(e=>[e[0],e[1]+2]);
+          // Check collision
+          for (let b of state.bullets) {
+            for (let i=0;i<state.enemies.length;i++) {
+              let e = state.enemies[i];
+              if (Math.abs(b[0]-e[0])<20 && Math.abs(b[1]-e[1])<10) {
+                state.score++;
+                state.enemies.splice(i,1);
+              }
+            }
+          }
+          // Spawn new enemies
+          if (Math.random()<0.02) state.enemies.push([Math.random()*270,0]);
+          // Player collision
+          for (let e of state.enemies) {
+            if (Math.abs(e[0]-state.playerX)<20 && e[1]>370) {
+              state.gameover = true;
+            }
+          }
+      on keydown:
+        js:
+          if (event.key == "ArrowLeft" && state.playerX > 0) state.playerX -= 10;
+          if (event.key == "ArrowRight" && state.playerX < 270) state.playerX += 10;
+          if (event.key == " ") state.bullets.push([state.playerX+13,380]);

@@ -1,0 +1,51 @@
+# Pong Game Example
+let ballX = 200
+let ballY = 120
+let ballVX = 3
+let ballVY = 2
+let paddleY = 100
+let score = 0
+
+page "Pong":
+  flex:
+    box:
+      text "Pong! Score: {score}"
+      button "Restart"
+        on click:
+          set ballX = 200
+          set ballY = 120
+          set ballVX = 3
+          set ballVY = 2
+          set score = 0
+    box:
+      # Canvas simulation with JS (draw using JS block)
+      js:
+        var canvas = document.getElementById('pong_canvas');
+        if (!canvas) {
+          canvas = document.createElement('canvas');
+          canvas.id = 'pong_canvas';
+          canvas.width = 400;
+          canvas.height = 240;
+          document.currentScript.parentElement.appendChild(canvas);
+        }
+        function draw() {
+          var ctx = canvas.getContext('2d');
+          ctx.clearRect(0,0,400,240);
+          ctx.fillRect(10, state.paddleY, 10, 50);
+          ctx.fillRect(state.ballX, state.ballY, 10, 10);
+        }
+        setInterval(draw, 16);
+      # Use game loop for movement
+      loop per frame:
+        set ballX = ballX + ballVX
+        set ballY = ballY + ballVY
+        <-if ballY <= 0 or ballY >= 230->
+          set ballVY = -ballVY
+        </-if->
+        <-if ballX <= 20 and ballY >= paddleY and ballY <= paddleY + 50->
+          set ballVX = -ballVX
+          set score = score + 1
+        </-if->
+        <-if ballX < 0 or ballX > 390->
+          set ballVX = -ballVX
+        </-if->

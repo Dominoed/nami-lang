@@ -1,0 +1,65 @@
+# Snake Game Example
+let direction = "right"
+let snake = [[5,5],[4,5],[3,5]]
+let foodX = 10
+let foodY = 10
+let score = 0
+let gameover = false
+
+page "Snake":
+  flex:
+    box:
+      text "Snake! Score: {score}"
+      button "Restart"
+        on click:
+          set snake = [[5,5],[4,5],[3,5]]
+          set direction = "right"
+          set score = 0
+          set gameover = false
+    box:
+      js:
+        var canvas = document.getElementById('snake_canvas');
+        if (!canvas) {
+          canvas = document.createElement('canvas');
+          canvas.id = 'snake_canvas';
+          canvas.width = 300;
+          canvas.height = 300;
+          document.currentScript.parentElement.appendChild(canvas);
+        }
+        function draw() {
+          var ctx = canvas.getContext('2d');
+          ctx.clearRect(0,0,300,300);
+          for (let part of state.snake) {
+            ctx.fillRect(part[0]*15, part[1]*15, 15, 15);
+          }
+          ctx.fillRect(state.foodX*15, state.foodY*15, 15, 15);
+        }
+        setInterval(draw, 50);
+      loop per frame:
+        <-if not gameover->
+          js:
+            // Basic snake movement in JS for now
+            let head = [...state.snake[0]];
+            if (state.direction == "right") head[0]++;
+            if (state.direction == "left") head[0]--;
+            if (state.direction == "up") head[1]--;
+            if (state.direction == "down") head[1]++;
+            state.snake.unshift(head);
+            if (head[0] == state.foodX && head[1] == state.foodY) {
+              state.score++;
+              state.foodX = Math.floor(Math.random()*20);
+              state.foodY = Math.floor(Math.random()*20);
+            } else {
+              state.snake.pop();
+            }
+            // Collision with wall or self
+            if (head[0]<0 || head[0]>19 || head[1]<0 || head[1]>19 ||
+                state.snake.slice(1).some(p=>p[0]==head[0]&&p[1]==head[1])) {
+              state.gameover = true;
+            }
+      on keydown:
+        js:
+          if (event.key == "ArrowUp") state.direction = "up";
+          if (event.key == "ArrowDown") state.direction = "down";
+          if (event.key == "ArrowLeft") state.direction = "left";
+          if (event.key == "ArrowRight") state.direction = "right";
