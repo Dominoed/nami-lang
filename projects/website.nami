@@ -1,0 +1,58 @@
+# Nami Project Website - Example
+let visitors = 1
+
+page "HOME":
+  flex:
+    box:
+      text "🌊 Welcome to Nami!"
+      text "Nami is an expressive language for building modern web apps and games."
+      text "Visitors: {visitors}"
+      button "Get Started"
+        route "Docs"
+      button "Playground"
+        route "Playground"
+      button "About"
+        route "About"
+      button "Increase Visitor Count"
+        on click:
+          set visitors = visitors + 1
+    image "nami_logo.png"
+
+page "About":
+  flex:
+    box:
+      text "About Nami"
+      text "Nami is designed to be simple, readable, and powerful."
+      text " - Write apps in minutes"
+      text " - Multipage, reactive, game-ready"
+      text " - Compile to HTML, CSS, and JS"
+      button "Home"
+        route "HOME"
+      button "Docs"
+        route "Docs"
+    image "nami_logo.png"
+
+page "Docs":
+  flex:
+    box:
+      text "Documentation"
+      text "See SYNTAX.txt for a language overview."
+      text "Full docs and examples available on GitHub."
+      button "Home"
+        route "HOME"
+      button "Playground"
+        route "Playground"
+
+page "Playground":
+  flex:
+    box:
+      text "Nami Playground"
+      text "Write and run Nami code live (feature coming soon!)"
+      button "Home"
+        route "HOME"
+      button "Docs"
+        route "Docs"
+
+js:
+  // This is global JS, runs on page load
+  console.log("Nami website loaded!");
