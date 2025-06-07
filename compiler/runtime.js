@@ -55,5 +55,8 @@ function switchPage(pageId) {
     if (el) el.style.display = '';
 }
 document.addEventListener("DOMContentLoaded", function() {
-    switchPage('page_HOME');
+    const firstPage = document.querySelector('.nami-page');
+    if (firstPage) {
+        switchPage(firstPage.id);
+    }
 });

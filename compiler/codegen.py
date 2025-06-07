@@ -62,9 +62,6 @@ function switchPage(pageId) {
     var el = document.getElementById(pageId);
     if (el) el.style.display = '';
 }
-document.addEventListener("DOMContentLoaded", function() {
-    switchPage('page_HOME');
-});
 """]
     pages = []
     if_counter = [0]
@@ -217,6 +214,7 @@ function update_{else_id}() {{
                 html.append(f"<!-- {n['text']} -->")
 
     walk(ast)
+    first_page = pages[0] if pages else None
     if len(pages) > 1:
         nav_html = "<nav>" + " | ".join(
             f"<a href='#' onclick=\"switchPage('page_{p}')\">{p}</a>" for p in pages
@@ -241,6 +239,8 @@ function update_{else_id}() {{
             js.append(code)
         elif node['type'] == 'js':
             js.append(node['code'])
+    if first_page:
+        js.append(f"document.addEventListener(\"DOMContentLoaded\", function() {{\n    switchPage('page_{first_page}');\n}});")
     js_out = "\n".join(js)
     # Asset copying
     asset_dir = os.path.join(os.path.dirname(source_path), "build/assets")
