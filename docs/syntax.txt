@@ -1,0 +1,135 @@
+NAMI LANGUAGE SYNTAX REFERENCE
+===============================================
+
+INDENTATION-BASED LAYOUT
+
+  Indent with spaces to declare hierarchy.
+
+  page "Home":
+    flex:
+      box:
+        text "Welcome to Nami!"
+        button "Go to Docs"
+          route "Docs"
+        button "Add"
+          on click:
+            set score = score + 1
+        button "Alert"
+          on click:
+            js "alert('Clicked!')"
+      image "nami_logo.png"
+
+===============================================
+
+PAGES
+
+  page "PageName":
+    ... page contents ...
+
+===============================================
+
+LAYOUTS
+
+  flex:
+  grid:
+  row:
+  col:
+  box:
+  spacer:
+
+===============================================
+
+UI COMPONENTS
+
+  text "Hello, {name}"
+  button "Label"
+    route "PageName"
+    on click:
+      set var = expr
+      js "any JS code"
+  input "Name"
+  textarea "Notes"
+  checkbox "Accept"
+  select:
+    option "A"
+    option "B"
+  image "myimg.png"
+  audio "sound.mp3"
+  video "clip.mp4"
+
+===============================================
+
+VARIABLES AND REACTIVITY
+
+  let score = 0
+  text "Score: {score}"
+  (inputs auto-bind to variables by label)
+
+===============================================
+
+LOGIC BLOCKS (CONDITIONALS, LOOPS)
+
+  <-if score > 10->
+    text "High score!"
+    <-if bonus->
+      text "Bonus active!"
+    </-if->
+  <-else->
+    text "Try again."
+  </-if->
+
+  <-for item in items->
+    text "Item: {item}"
+  </-for->
+
+  <-while timer > 0->
+    text "Timer: {timer}"
+  </-while->
+
+===============================================
+
+GAME/MAIN LOOP
+
+  loop per frame:
+    # runs every frame
+    set score = score + 1
+
+  tick every 2:
+    # runs every 2 seconds
+
+===============================================
+
+EVENTS
+
+  on click:
+    set var = expr
+    route "PageName"
+    js "alert('Clicked!')"
+
+===============================================
+
+RAW JS BLOCKS
+
+  js:
+    // Any JavaScript code here, runs globally
+
+  js "any one-liner JS code"
+
+===============================================
+
+ASSETS
+
+  All used images/audio/video are auto-copied to build/assets.
+  Reference as "filename.ext".
+
+===============================================
+
+NOTES
+
+  - Comments start with #
+  - Indentation is significant
+  - Use {var} inside text for variable interpolation/reactivity
+  - Use logic blocks and events for flow and interactivity
+  - Inputs automatically bind to state by label
+
+===============================================
