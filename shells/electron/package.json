@@ -1,0 +1,12 @@
+{
+  "name": "nami-shell",
+  "version": "1.0.0",
+  "main": "main.js",
+  "description": "Electron shell for Nami desktop apps",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^30.0.0"
+  }
+}
